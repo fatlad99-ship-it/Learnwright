@@ -8,7 +8,6 @@
     body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: #222; }
     header { text-align:center; padding:30px 20px; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
     header img { height:260px; display:block; margin:0 auto; }
-    nav a { margin-left:20px; text-decoration:none; color:#222; font-weight:bold; }
     .hero { text-align:center; padding:80px 20px; background:#f5f5f5; }
     .hero h1 { font-size:40px; margin-bottom:20px; }
     .hero p { font-size:18px; max-width:800px; margin:0 auto 30px; }
@@ -17,6 +16,10 @@
     .services { display:flex; gap:40px; flex-wrap:wrap; }
     .card { flex:1 1 400px; padding:25px; box-shadow:0 2px 10px rgba(0,0,0,0.08); border-radius:10px; }
     .calendar { background:#f5f5f5; padding:70px 20px; text-align:center; }
+    .reviews, .photos { background:#fafafa; }
+    .review-card { margin:15px 0; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-radius:10px; }
+    .photo-grid { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; margin-top:30px; }
+    .photo-grid img { width:280px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
     footer { text-align:center; padding:30px; border-top:1px solid #ddd; font-size:14px; }
   </style>
 </head>
@@ -24,7 +27,6 @@
 
 <header>
   <img src="logo.png" alt="Learn Wright Logo" />
-  
 </header>
 
 <section class="hero">
@@ -37,7 +39,7 @@
   </div>
 </section>
 
-<section id="services" class="section">
+<section class="section">
   <h2>Our Services</h2>
   <div class="services">
     <div class="card">
@@ -51,18 +53,25 @@
   </div>
 </section>
 
-<section id="booking" class="calendar">
+<section class="calendar">
   <h2>Book Your Lesson</h2>
   <p>Use the calendar below to choose a time that suits you.</p>
 
-  <!-- Calendly inline widget begin -->
   <div class="calendly-inline-widget" data-url="https://calendly.com/andywr75/30min" style="min-width:320px;height:700px;"></div>
-  <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-  <!-- Calendly inline widget end -->
-
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </section>
 
-<section id="contact" class="section" style="text-align:center;">
+<section class="section reviews">
+  <h2 style="text-align:center;">Student Reviews</h2>
+  <div id="reviewsContainer"></div>
+</section>
+
+<section class="section photos" style="text-align:center;">
+  <h2>Success Photos</h2>
+  <div class="photo-grid" id="photoGrid"></div>
+</section>
+
+<section class="section" style="text-align:center;">
   <h2>Contact Learn Wright</h2>
   <p>Call, text, or WhatsApp to arrange your lesson.</p>
   <p><strong>Phone:</strong> 079611011193</p>
@@ -72,6 +81,32 @@
 <footer>
   © 2026 Learn Wright Driving School. All rights reserved.
 </footer>
+
+<script>
+// LOAD REVIEWS FROM reviews.txt
+fetch('reviews.txt')
+  .then(response => response.text())
+  .then(text => {
+    const reviews = text.split('\n').filter(r => r.trim() !== '');
+    const container = document.getElementById('reviewsContainer');
+    reviews.forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'review-card';
+      div.innerText = r;
+      container.appendChild(div);
+    });
+  })
+  .catch(() => {});
+
+// AUTO LOAD PHOTOS NAMED photo1.jpg, photo2.jpg...
+const grid = document.getElementById('photoGrid');
+for (let i = 1; i <= 20; i++) {
+  const img = document.createElement('img');
+  img.src = `photo${i}.jpg`;
+  img.onerror = () => img.remove();
+  grid.appendChild(img);
+}
+</script>
 
 </body>
 </html>
